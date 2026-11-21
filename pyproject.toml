@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quorum-research"
+version = "4.0.0"
+requires-python = ">=3.10"
+description = "Quorum — research your sources agree on (multi-agent research & knowledge synthesis)"
+
+[project.scripts]
+quorum = "retrieval_pipeline.cli:main"
+research = "retrieval_pipeline.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["retrieval_pipeline*"]
+
+[tool.setuptools.package-data]
+retrieval_pipeline = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

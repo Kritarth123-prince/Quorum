@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quorum</title>
+  <meta name="description" content="Quorum — research your sources agree on. Plans, searches, cross-checks and writes cited answers.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='14' cy='14' r='9' fill='none' stroke='%233b6fd8' stroke-width='3'/%3E%3Cpath d='M21 21l7 7' stroke='%233b6fd8' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Threads and providers">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="14" cy="14" r="9"/><path d="M21 21l7 7"/></svg>
+        <span>Quorum</span>
+      </div>
+      <p class="tagline">Research your sources agree on</p>
+      <button class="btn btn-primary new-thread" id="newThread" type="button">+ New thread</button>
+
+      <nav class="history" aria-label="Recent threads">
+        <h2>Recent threads</h2>
+        <ul id="historyList"><li class="muted">No threads yet</li></ul>
+      </nav>
+
+      <section class="providers" aria-label="Provider status">
+        <div class="providers-head">
+          <h2>Providers</h2>
+          <button class="link-btn" id="refreshProviders" type="button" title="Re-check credits and status">Refresh</button>
+        </div>
+        <ul id="providerList"><li class="muted">Loading…</li></ul>
+        <p class="mode-line" id="modeLine"></p>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open sidebar" aria-controls="sidebar">☰</button>
+
+      <section class="hero" id="hero">
+        <h1>What do you want to research?</h1>
+        <p class="sub">Plans the research, searches the web and academic papers, cross-checks the claims and writes a cited answer.</p>
+        <form class="ask" id="askForm" autocomplete="off">
+          <label class="visually-hidden" for="askInput">Research question</label>
+          <textarea id="askInput" rows="2" placeholder="Ask anything — e.g. Compare Qdrant, Weaviate and Milvus for production RAG" required maxlength="2000"></textarea>
+          <div class="ask-bar">
+            <label class="toggle"><input type="checkbox" id="optAcademic"> <span>Academic papers</span></label>
+            <label class="toggle"><input type="checkbox" id="optCrawl"> <span>Deep read</span></label>
+            <button class="btn btn-primary" type="submit" id="askBtn">Research</button>
+          </div>
+        </form>
+        <div class="examples" id="examples">
+          <button type="button" class="chip">How does retrieval-augmented generation reduce hallucinations?</button>
+          <button type="button" class="chip">Is intermittent fasting better than calorie restriction for weight loss?</button>
+          <button type="button" class="chip">Compare PostgreSQL and MongoDB for a new SaaS product</button>
+        </div>
+      </section>
+
+      <section class="thread" id="thread" aria-live="polite"></section>
+
+      <form class="followup hidden" id="followForm" autocomplete="off">
+        <label class="visually-hidden" for="followInput">Follow-up question</label>
+        <textarea id="followInput" rows="1" placeholder="Ask a follow-up…" required maxlength="2000"></textarea>
+        <label class="toggle small"><input type="checkbox" id="followAcademic"> <span>Academic</span></label>
+        <label class="toggle small"><input type="checkbox" id="followCrawl"> <span>Deep read</span></label>
+        <button class="btn btn-primary" type="submit" id="followBtn">Ask</button>
+      </form>
+    </main>
+  </div>
+
+  <template id="turnTemplate">
+    <article class="turn">
+      <header class="turn-head">
+        <h2 class="question"></h2>
+        <div class="turn-meta"><span class="time"></span><span class="latency"></span></div>
+      </header>
+      <ol class="steps" aria-label="Progress">
+        <li data-node="planner">Plan</li>
+        <li data-node="retriever">Search</li>
+        <li data-node="verifier">Verify</li>
+        <li data-node="writer">Write</li>
+        <li data-node="reporter">Report</li>
+      </ol>
+      <div class="plan hidden"></div>
+      <div class="notices"></div>
+      <div class="sources-strip hidden" aria-label="Sources"></div>
+      <section class="answer-block">
+        <div class="answer-head">
+          <h3>Answer</h3>
+          <span class="badge provider-badge hidden"></span>
+          <div class="answer-actions">
+            <button type="button" class="link-btn copy-btn" disabled>Copy</button>
+            <button type="button" class="link-btn export-btn" disabled>Export .md</button>
+            <button type="button" class="link-btn stop-btn">Stop</button>
+          </div>
+        </div>
+        <div class="answer markdown"><p class="placeholder">Working on it…</p></div>
+      </section>
+      <section class="report hidden">
+        <div class="confidence"></div>
+        <div class="tabs" role="tablist">
+          <button role="tab" type="button" class="tab active" data-tab="findings">Key findings</button>
+          <button role="tab" type="button" class="tab" data-tab="sources">Sources</button>
+          <button role="tab" type="button" class="tab" data-tab="claims">Verified claims</button>
+          <button role="tab" type="button" class="tab" data-tab="trace">Agent trace</button>
+        </div>
+        <div class="tab-panel" data-panel="findings"></div>
+        <div class="tab-panel hidden" data-panel="sources"></div>
+        <div class="tab-panel hidden" data-panel="claims"></div>
+        <div class="tab-panel hidden" data-panel="trace"></div>
+        <div class="related"></div>
+      </section>
+    </article>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
