@@ -1,13 +1,12 @@
 version: 2
 updates:
   - package-ecosystem: pip
-    directory: "/"
-    schedule:
-      interval: weekly
-  - package-ecosystem: pip
     directory: "/retrieval_pipeline"
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: transformers
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker
     directory: "/"
     schedule:
