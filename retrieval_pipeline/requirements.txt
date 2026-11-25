@@ -4,7 +4,7 @@
 
 # ── ML (CPU) — numpy must stay < 2 for torch 2.3 ──────────────────────────────
 numpy==1.26.4
-torch==2.3.0
+torch==2.15.0
 sentence-transformers==3.0.1
 transformers==4.41.1
 
