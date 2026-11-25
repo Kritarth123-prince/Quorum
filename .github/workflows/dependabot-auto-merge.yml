@@ -1,0 +1,46 @@
+name: Dependabot auto-merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for tests and CodeQL
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          for attempt in $(seq 1 60); do
+            checks="$(gh api "repos/$GH_REPO/commits/$HEAD_SHA/check-runs")"
+            tests="$(jq -r '[.check_runs[] | select(.name == "Tests")] | sort_by(.started_at // "") | last | .conclusion // ""' <<< "$checks")"
+            codeql="$(jq -r '[.check_runs[] | select(.name == "Analyze")] | sort_by(.started_at // "") | last | .conclusion // ""' <<< "$checks")"
+
+            if [[ "$tests" == "success" && "$codeql" == "success" ]]; then
+              exit 0
+            fi
+            if [[ "$tests" =~ ^(failure|cancelled|timed_out|action_required|startup_failure)$ || "$codeql" =~ ^(failure|cancelled|timed_out|action_required|startup_failure)$ ]]; then
+              echo "Tests or CodeQL failed; leaving the Dependabot PR open."
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "Timed out waiting for tests and CodeQL; leaving the Dependabot PR open."
+          exit 1
+      - name: Merge Dependabot PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge "$PR_URL" --squash
