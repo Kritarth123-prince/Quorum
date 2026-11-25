@@ -25,7 +25,7 @@ duckduckgo-search==8.1.1
 beautifulsoup4==4.12.3
 lxml==5.2.2
 playwright==1.65.2
-qdrant-client==1.9.1
+qdrant-client==1.20.0
 rank-bm25==0.2.2
 
 # ── Memory ────────────────────────────────────────────────────────────────────
