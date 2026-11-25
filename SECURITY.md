@@ -1,10 +1,15 @@
 # Security Policy
 
-## Supported versions
+## Supported Versions
 
-Security fixes are applied to the latest code on the `main` branch. Older releases are not currently supported.
+The project version is currently 4.0.0. Security fixes are provided for the latest 4.0.x release.
 
-## Reporting a vulnerability
+| Version | Supported |
+| ------- | --------- |
+| 4.0.x   | Yes       |
+| < 4.0   | No        |
+
+## Reporting a Vulnerability
 
 Please report suspected vulnerabilities privately using GitHub's **Report a vulnerability** option on this repository's Security tab. Private vulnerability reporting is enabled.
 
