@@ -5,8 +5,8 @@
 # ── ML (CPU) — numpy must stay < 2 for torch 2.3 ──────────────────────────────
 numpy==1.26.4
 torch==2.3.0
-sentence-transformers==3.0.1
-transformers==4.41.1
+sentence-transformers==5.2.3
+transformers==5.20.2
 
 # ── API ───────────────────────────────────────────────────────────────────────
 fastapi==0.162.0
